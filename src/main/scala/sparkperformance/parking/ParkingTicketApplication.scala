@@ -15,27 +15,18 @@ object ParkingTicketApplication {
 
   val log_ = LoggerFactory.getLogger(this.getClass.getName)
 
-  def noOfPartition(args: Array[String], parameterIndex: Int): Int = {
-    if (args.length > parameterIndex + 1) {
-      args(parameterIndex + 1).toInt
-    }
-    else {
-      -1
-    }
-
-  }
+  val fields = Array("Plate ID").map(f => f.toLowerCase.trim)
+  val aggFields = Array("Issue Date").map(f => f.toLowerCase.trim)
 
   def main(args: Array[String]): Unit = {
 
     val localRun = SparkContextBuilder.isRunLocal(args)
     val sparkSession = SparkContextBuilder.newSparkSession(localRun, "Parking Ticket")
-
     val parameterIndex = inputParameterIndex(localRun)
     val partitionCount = noOfPartition(args, parameterIndex)
 
-    val fields: Array[String] = Array("Plate ID").map(f => f.toLowerCase.trim)
-    val aggFields: Array[String] = Array("Issue Date").map(f => f.toLowerCase.trim)
-    val fileData: RDD[String] = sparkSession.sparkContext.textFile(args(parameterIndex))
+
+    val fileData = sparkSession.sparkContext.textFile(args(parameterIndex))
 
     val repartitionData = partitionCount match {
       case x if x > -1 => fileData.repartition(partitionCount)
@@ -52,30 +43,27 @@ object ParkingTicketApplication {
     log_.info("Agg Field offset {}", aggFieldsOffset)
 
     val rows = repartitionData.map(line => line.split(","))
-
-    val requiredFields = rows.map(row => {
-
-      val issueDate = row(aggFieldsOffset.get("issue date").get)
-      val issueDateValues = mutable.Set[String]()
-      issueDateValues.add(issueDate)
-
-      (fieldOffset.map(fieldInfo => row(fieldInfo._2))
-        .mkString(","), (1, issueDateValues))
-    })
-
-
-    val aggValue = requiredFields.reduceByKey((value1, value2) => {
-      val newCount = value1._1 + value2._1
-
-      val dates = value1._2
-      dates.foreach(d => value2._2.add(d))
-
-      (newCount, value2._2)
-
-    })
+    val plateLevelData = rows.map(toPlateLevelData(fieldOffset, aggFieldsOffset, _))
+    val aggValue = plateLevelData.reduceByKey((value1, value2) => mergeValues(value1, value2))
 
     aggValue.take(100).foreach(row => log_.info("Row {}", row))
 
+  }
+
+  private def mergeValues(value1: (Int, mutable.Set[String]), value2: (Int, mutable.Set[String])) = {
+    val newCount = value1._1 + value2._1
+    val dates = value1._2
+    dates.foreach(d => value2._2.add(d))
+
+    (newCount, value2._2)
+  }
+
+  private def toPlateLevelData(fieldOffset: Map[String, Int], aggFieldsOffset: Map[String, Int], row: Array[String]) = {
+    val issueDate = row(aggFieldsOffset.get("issue date").get)
+    val issueDateValues = mutable.Set[String]()
+    issueDateValues.add(issueDate)
+
+    (fieldOffset.map(fieldInfo => row(fieldInfo._2)).mkString(","), (1, issueDateValues))
   }
 
   private def dataHeaders(fileData: RDD[String]): List[String] = {
@@ -91,4 +79,15 @@ object ParkingTicketApplication {
     }
 
   }
+
+  def noOfPartition(args: Array[String], parameterIndex: Int): Int = {
+    if (args.length > parameterIndex + 1) {
+      args(parameterIndex + 1).toInt
+    }
+    else {
+      -1
+    }
+
+  }
+
 }
