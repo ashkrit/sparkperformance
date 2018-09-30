@@ -50,7 +50,7 @@ object ParkingTicketApplication {
 
   }
 
-  private def mergeValues(value1: (Int, mutable.Set[String]), value2: (Int, mutable.Set[String])) = {
+  private def mergeValues(value1: (Int, mutable.Set[String]), value2: (Int, mutable.Set[String])): (Int, mutable.Set[String]) = {
     val newCount = value1._1 + value2._1
     val dates = value1._2
     dates.foreach(d => value2._2.add(d))
