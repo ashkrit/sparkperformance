@@ -6,6 +6,11 @@ import sparkperformance.builder.SparkContextBuilder
 
 import scala.collection.mutable
 
+/*
+    Based on data from - https://www.kaggle.com/new-york-city/nyc-parking-tickets
+    Download CSV and run it.
+ */
+
 object ParkingTicketApplication {
 
   val log_ = LoggerFactory.getLogger(this.getClass.getName)
