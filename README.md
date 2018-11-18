@@ -18,4 +18,6 @@ spark-submit --master spark://host:port --conf spark.eventLog.enabled=true --cla
 --conf spark.serializer=org.apache.spark.serializer.KryoSerializer
 
 
-spark-submit --master spark://ashkrit-laptop.localdomain:7077 --conf spark.eventLog.enabled=true --conf spark.executor.extraJavaOptions='-XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps' --conf spark.serializer=org.apache.spark.serializer.KryoSerializer --class sparkperformance.parking.ParkingTicketApplication ./target/sparkperformance-1.0-SNAPSHOT.jar /data/nyc-parking-tickets
+Spark UI Blog
+
+https://ashkrit.blogspot.com/2018/11/inside-spark-ui.html
