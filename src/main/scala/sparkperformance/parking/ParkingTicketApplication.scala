@@ -1,5 +1,9 @@
 package sparkperformance.parking
 
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
+import org.apache.hadoop.io.compress.GzipCodec
 import org.apache.spark.rdd.RDD
 import org.slf4j.LoggerFactory
 import sparkperformance.builder.SparkContextBuilder
@@ -25,7 +29,6 @@ object ParkingTicketApplication {
     val parameterIndex = inputParameterIndex(localRun)
     val partitionCount = noOfPartition(args, parameterIndex)
 
-
     val fileData = sparkSession.sparkContext.textFile(args(parameterIndex))
 
     val repartitionData = partitionCount match {
@@ -46,8 +49,12 @@ object ParkingTicketApplication {
     val plateLevelData = rows.map(toPlateLevelData(fieldOffset, aggFieldsOffset, _))
     val aggValue = plateLevelData.reduceByKey((value1, value2) => mergeValues(value1, value2))
 
-    aggValue.take(100).foreach(row => log_.info("Row {}", row))
+    val now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm"))
 
+    aggValue.map {
+      case (key, value) => Array(key, value._1, value._2.mkString(",")).mkString("\t")
+    }.coalesce(100)
+      .saveAsTextFile(s"/data/output/${now}", classOf[GzipCodec])
   }
 
   private def mergeValues(value1: (Int, mutable.Set[String]), value2: (Int, mutable.Set[String])): (Int, mutable.Set[String]) = {
