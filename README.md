@@ -20,4 +20,4 @@ spark-submit --master spark://host:port --conf spark.eventLog.enabled=true --cla
 
 Spark UI Blog
 
-https://ashkrit.blogspot.com/2018/11/inside-spark-ui.html
+https://ashkrit.blogspot.com/2018/11/insights-from-spark-ui.html
