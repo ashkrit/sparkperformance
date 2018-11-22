@@ -14,6 +14,13 @@ object SparkContextBuilder {
     }
   }
 
+  def isLocalSpark(): Boolean = {
+    val runLocalValue = System.getProperties
+      .getProperty("spark.local", "false")
+      .toBoolean
+    runLocalValue
+  }
+
 
   def newSparkSession(runLocal: Boolean, name: String): SparkSession = {
 
