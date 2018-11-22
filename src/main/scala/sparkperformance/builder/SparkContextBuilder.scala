@@ -1,7 +1,7 @@
 package sparkperformance.builder
 
-import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.{SparkConf, SparkException}
 
 object SparkContextBuilder {
 
@@ -28,10 +28,21 @@ object SparkContextBuilder {
     if (runLocal) {
       sparkConf.setMaster("local[*]")
     }
-    val sparkSession = SparkSession.builder()
-      .config(sparkConf)
-      .getOrCreate()
-    sparkSession
+    try {
+      val sparkSession = SparkSession.builder()
+        .config(sparkConf)
+        .getOrCreate()
+      sparkSession
+    }
+    catch {
+      case oops: SparkException => {
+        if (oops.getMessage.toLowerCase.indexOf("master url") > -1) {
+          println("Set local mode using -Dspark.local=true variable")
+        }
+        println()
+        throw oops
+      }
+    }
   }
 
 }
