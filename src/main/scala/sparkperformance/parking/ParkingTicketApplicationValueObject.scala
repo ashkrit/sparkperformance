@@ -15,7 +15,7 @@ import scala.collection.mutable
     Download CSV and run it.
  */
 
-case class GroupByValue(var count: Int, val days: mutable.Set[Int])
+
 
 object ParkingTicketApplicationValueObject {
 
@@ -143,3 +143,5 @@ object ParkingTicketApplicationValueObject {
   }
 
 }
+
+case class GroupByValue(var count: Int, val days: mutable.Set[Int])
