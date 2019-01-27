@@ -19,7 +19,7 @@ object SparkMonitoringAdvance {
       log.info("Starting spark application ")
 
       val localRun = SparkContextBuilder.isLocalSpark
-      val sparkSession = SparkContextBuilder.newSparkSession(localRun, "Poor man monitoring")
+      val sparkSession = SparkContextBuilder.newSparkSession(localRun, "Advance monitoring")
       sparkSession.sparkContext.addSparkListener(new StageAccumulatorListener)
       val pointsRecordCounter = sparkSession.sparkContext.longAccumulator("recordCounter")
 
