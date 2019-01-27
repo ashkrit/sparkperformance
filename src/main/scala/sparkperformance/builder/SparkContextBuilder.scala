@@ -1,9 +1,13 @@
 package sparkperformance.builder
 
+import java.util.concurrent.atomic.AtomicBoolean
+
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.{SparkConf, SparkException}
 
 object SparkContextBuilder {
+
+  val contextCreate = new AtomicBoolean(false)
 
   def isRunLocal(args: Array[String]): Boolean = {
     if (args.length > 0) {
@@ -12,6 +16,10 @@ object SparkContextBuilder {
     else {
       false
     }
+  }
+
+  def isContextNotCreated(): Boolean = {
+    !contextCreate.get()
   }
 
   def isLocalSpark(): Boolean = {
@@ -32,6 +40,8 @@ object SparkContextBuilder {
       val sparkSession = SparkSession.builder()
         .config(sparkConf)
         .getOrCreate()
+
+      contextCreate.set(true)
       sparkSession
     }
     catch {

@@ -21,3 +21,6 @@ spark-submit --master spark://host:port --conf spark.eventLog.enabled=true --cla
 Spark UI Blog
 
 https://ashkrit.blogspot.com/2018/11/insights-from-spark-ui.html
+
+
+spark-submit --master local[*] --conf spark.eventLog.enabled=true --class sparkperformance.parking.ParkingTicketIdGeneratorApplication ./target/sparkperformance-1.0-SNAPSHOT.jar /data/Users/ashkrit/Downloads/nyc-parking-tickets /tmp/nycdict
