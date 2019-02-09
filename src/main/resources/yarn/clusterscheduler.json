@@ -1,0 +1,67 @@
+{
+  "scheduler": {
+    "schedulerInfo": {
+      "capacity": 100.0,
+      "maxCapacity": 100.0,
+      "queueName": "root",
+      "queues": {
+        "queue": [
+          {
+            "capacity": 5.0,
+            "maxCapacity": 10.0,
+            "usedCapacity": 2.7,
+            "absoluteCapacity": 2.6775,
+            "absoluteMaxCapacity": 25.0,
+            "absoluteUsedCapacity": 0.0,
+            "maxActiveApplications": 1,
+            "maxActiveApplicationsPerUser": 1,
+            "maxApplications": 267,
+            "maxApplicationsPerUser": 267,
+            "numActiveApplications": 0,
+            "numApplications": 0,
+            "numContainers": 0,
+            "numPendingApplications": 0,
+            "queueName": "a1a",
+            "resourcesUsed": {
+              "memory": 1000,
+              "vCores": 70
+            },
+            "state": "RUNNING",
+            "type": "capacitySchedulerLeafQueueInfo",
+            "usedResources": "<memory:0, vCores:0>",
+            "userLimit": 100,
+            "userLimitFactor": 1.0,
+            "users": null
+          },
+          {
+            "capacity": 15.0,
+            "maxCapacity": 30.0,
+            "usedCapacity": 6.0,
+            "absoluteCapacity": 2.6775,
+            "absoluteMaxCapacity": 25.0,
+            "absoluteUsedCapacity": 0.0,
+            "maxActiveApplications": 1,
+            "maxActiveApplicationsPerUser": 1,
+            "maxApplications": 267,
+            "maxApplicationsPerUser": 267,
+            "numActiveApplications": 0,
+            "numApplications": 0,
+            "numContainers": 0,
+            "numPendingApplications": 0,
+            "queueName": "default",
+            "resourcesUsed": {
+              "memory": 1000,
+              "vCores": 40
+            },
+            "state": "RUNNING",
+            "type": "capacitySchedulerLeafQueueInfo",
+            "usedResources": "<memory:0, vCores:0>",
+            "userLimit": 100,
+            "userLimitFactor": 1.0,
+            "users": null
+          }
+        ]
+      }
+    }
+  }
+}
