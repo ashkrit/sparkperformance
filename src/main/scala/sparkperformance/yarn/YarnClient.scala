@@ -18,7 +18,7 @@ trait YarnClient {
       val usedCores = ((cores * q.usedCapacity) / 100).toLong
       q.availableCores = q.capacityCores - usedCores
       q
-    })
+    }).filter(q => q.availableCores > 0)
       .sortBy(_.availableCores)(Ordering[Long].reverse).toList
 
     queueWithCapacity
