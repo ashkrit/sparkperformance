@@ -12,7 +12,7 @@ object SparkJobSchedulerApp {
     println(queueWithCapacity)
     val acceptedApps = client.appsBy("someuser", "accepted")
 
-    client.moveApp(acceptedApps(0), queueWithCapacity) //Move to available queue
+    client.moveApp(acceptedApps.apps.app.get(0), queueWithCapacity) //Move to available queue
 
   }
 
