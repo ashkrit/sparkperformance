@@ -12,10 +12,10 @@ trait YarnClient {
   def freeQueues(metrics: ClusterMetrics, clusterQueueInfo: ClusterScheduler): List[Queue] = {
 
     val queues = clusterQueueInfo.scheduler.schedulerInfo.queues
-    val cores = metrics.clusterMetrics.allocatedVirtualCores
+    val cores = metrics.clusterMetrics.totalVirtualCores
     val queueWithCapacity = queues.queue.asScala.map(q => {
       q.capacityCores = ((cores * q.maxCapacity) / 100).toLong
-      val usedCores = ((cores * q.usedCapacity) / 1000).toLong
+      val usedCores = ((cores * q.usedCapacity) / 100).toLong
       q.availableCores = q.capacityCores - usedCores
       q
     })
