@@ -6,6 +6,8 @@ import scala.collection.JavaConverters._
 
 object SparkJobSchedulerApp {
 
+  val WaitTimeThreshHoldInMinute = 2
+
   def main(args: Array[String]): Unit = {
 
     val client: YarnClient = new MockYarnClient
@@ -19,9 +21,7 @@ object SparkJobSchedulerApp {
 
     val selectedYarnApps = client.appsBy(user, status)
 
-    val WaitTimeThreshHoldInMinute = 2
-
-    if (selectedYarnApps.apps != null && selectedYarnApps.apps.app != null) {
+    if (hasApps(selectedYarnApps)) {
 
       val now = System.currentTimeMillis()
 
@@ -39,4 +39,7 @@ object SparkJobSchedulerApp {
 
   }
 
+  private def hasApps(selectedYarnApps: YarnApps): Boolean = {
+    selectedYarnApps.apps != null && selectedYarnApps.apps.app != null
+  }
 }
