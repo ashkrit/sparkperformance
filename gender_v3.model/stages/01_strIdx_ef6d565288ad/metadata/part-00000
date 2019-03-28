@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.StringIndexerModel","timestamp":1553789181962,"sparkVersion":"2.2.0","uid":"strIdx_ef6d565288ad","paramMap":{"outputCol":"last_index","handleInvalid":"error","inputCol":"last"}}

@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.VectorAssembler","timestamp":1553789183547,"sparkVersion":"2.2.0","uid":"vecAssembler_40d11ef18a43","paramMap":{"inputCols":["last_vector","last2_vector","last3_vector","first_vector","first2_vector","first3_vector"],"outputCol":"features"}}
