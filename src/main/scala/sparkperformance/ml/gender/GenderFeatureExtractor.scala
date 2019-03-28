@@ -1,61 +1,46 @@
 package sparkperformance.ml.gender
 
-import org.apache.spark.ml.linalg
-import org.apache.spark.ml.linalg.Vectors
-
 object GenderFeatureExtractor {
 
-  val vowelChars = Set('a', 'e', 'i', 'o', 'u')
-  val consonantsChars = Set('z', 'b', 't', 'g', 'h')
 
+  case class NameFeatures(gender: String, name: String,
+                          last: String, last2: String, last3: String, first: String, first2: String, first3: String)
 
-  def hasVowel(lastChar: Char): Double = {
-    if (vowelChars.contains(lastChar))
-      1.0
-    else
-      0.0
+  def suffix(value: String, len: Int): String = {
+    if (value.length >= len) {
+      value.substring(value.length - len);
+    }
+    else {
+      " "
+    }
   }
 
-  def hasConsonant(lastChar: Char): Double = {
-    if (consonantsChars.contains(lastChar))
-      1.0
-    else
-      0.0
+  def prefix(value: String, len: Int): String = {
+    if (value.length >= len) {
+      value.substring(0, len)
+    }
+    else {
+      " "
+    }
   }
-
-  def withL(firstChar: Char): Double = {
-    if (firstChar == 'l') 1.0
-    else 0.0
-  }
-
-  def withN(char: Char): Double = {
-    if (char == 'n') 1.0
-    else 0.0
-  }
-
-
-  def withValues(value: String, matchValues: String): Double = {
-    if (value.equals(matchValues)) 1.0
-    else 0.0
-  }
-
-  case class NameFeatures(gender: String, name: String, features: linalg.Vector)
 
   def buildFeatures(row: Array[String]): NameFeatures = {
     val name = row(0)
     val nameValue = name.toLowerCase()
-    val first = nameValue.head
-    val last = name.last
-    val suffix2 = name.substring(name.length - 2)
 
-    val features = Array(
-      GenderFeatureExtractor.hasVowel(last),
-      GenderFeatureExtractor.hasConsonant(last),
-      GenderFeatureExtractor.withL(first),
-      GenderFeatureExtractor.withN(last),
-      GenderFeatureExtractor.withValues(suffix2, "yn"),
-      GenderFeatureExtractor.withValues(suffix2, "ch"))
-    val vector: linalg.Vector = Vectors.dense(features)
-    NameFeatures(row(1), nameValue, vector)
+    NameFeatures(row(1), name,
+      nameValue.last.toString, suffix(nameValue, 2), suffix(nameValue, 3),
+      nameValue.head.toString, prefix(nameValue, 2), prefix(nameValue, 3))
+
   }
+
+  def toFeatures(name: String): NameFeatures = {
+
+    val nameValue = name.toLowerCase()
+    NameFeatures("???", name,
+      nameValue.last.toString, suffix(nameValue, 2), suffix(nameValue, 3),
+      nameValue.head.toString, prefix(nameValue, 2), prefix(nameValue, 3))
+
+  }
+
 }
