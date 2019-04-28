@@ -33,6 +33,8 @@ object ParkingTicketApplicationOptimized {
 
     val fileData = sparkSession.sparkContext.textFile(args(parameterIndex))
 
+
+
     val repartitionData = partitionCount match {
       case x if x > -1 => fileData.coalesce(partitionCount)
       case _ => fileData

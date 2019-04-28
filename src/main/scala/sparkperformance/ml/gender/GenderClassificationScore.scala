@@ -21,6 +21,7 @@ object GenderClassificationScore {
 
     val model = PipelineModel.load("gender_v3.model")
 
+    log.info(s"${model.stages(14)}")
     val scanner = new Scanner(System.in)
 
     val context = sparkSession.sparkContext

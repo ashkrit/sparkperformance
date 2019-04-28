@@ -18,7 +18,6 @@ object MapPartitionApplicationFilter {
         rows.flatMap(row => Some(row))
       }).count()
 
-
     log_.info("Count {}", count)
 
   }
